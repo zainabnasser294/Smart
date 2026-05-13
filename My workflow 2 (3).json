@@ -1,0 +1,419 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        -96
+      ],
+      "id": "b39eb62e-ead1-4181-a73b-555e570f5f62",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f8374bc0-7992-45de-a51e-523debf6c284",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "d29f1b7a-06ae-41b8-acdf-d4eec092c4bd",
+      "name": "Webhook",
+      "webhookId": "f8374bc0-7992-45de-a51e-523debf6c284"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $node[\"Webhook\"].json[\"body\"][\"chatInput\"] }}",
+        "options": {
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        -96
+      ],
+      "id": "1039f28e-4ce2-4fa2-9235-0b03f4a36a06",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.user_email }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        112
+      ],
+      "id": "ccae2b3a-feb9-4fc0-9fa7-ee067f98dc82",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "\"Use this tool to fetch data from the database. It contains tables: users, contact_messages, devices, and metrics. Choose the right table based on the user's question.\"",
+        "operation": "executeQuery",
+        "query": "\nSELECT 'Metrics' AS source, m.* FROM metrics m ORDER BY id DESC LIMIT 5;\n\n\nSELECT 'Alerts' AS source, a.* FROM nbi_alerts a LIMIT 5;\n\n\nSELECT 'Devices' AS source, d.* FROM devices d LIMIT 5;\n\n\nSELECT 'Users' AS source, u.* FROM users u LIMIT 5;\n\n\nSELECT 'Messages' AS source, c.* FROM contact_messages c LIMIT 5;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        432,
+        112
+      ],
+      "id": "16c21e30-8606-4484-b831-5cdee725356f",
+      "name": "Execute a SQL query in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "f8ID6aYF5riAagJ0",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "zainabnasserdeveloper@gmail.com",
+        "toEmail": "={{ $node[\"Webhook\"].json[\"body\"][\"user_email\"] }}",
+        "subject": "\"Reply from the smart assistant\"",
+        "emailFormat": "text",
+        "text": "={{ $node[\"AI Agent\"].json[\"output\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        -96
+      ],
+      "id": "25233e16-ddde-42b0-a42f-9cad988d36aa",
+      "name": "Send an Email",
+      "webhookId": "9d34f26f-7120-454b-82f8-6b9aace0f060",
+      "credentials": {
+        "smtp": {
+          "id": "rePltakqcMZqgmpF",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        592,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "6dc3f5a4-15bc-46b1-8f9a-91099040afb6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        752
+      ],
+      "typeVersion": 1,
+      "id": "2171842b-09a2-4e7b-ace3-5c16c854bc01",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1040,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "9805d3ee-9105-4f5d-b39f-758caca02db3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"output\": {{ JSON.stringify($node[\"AI Agent\"].json[\"output\"]) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        816,
+        -96
+      ],
+      "id": "cd5190fc-da48-4cb5-857e-00f2d1d1d16d",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "7ccd0444-2ab5-491b-a3f0-31339146e5e7",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "f3dde22c-4871-4676-bb83-732b7e55fced",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1584,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "efa1e84e-13a3-4320-8d20-c060d024d109",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1200,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "3f83d4c1-40fc-47ba-b1b2-119ec359e610",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "3af56d87-2d5f-4bf7-8aed-79e0f437e191",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1008,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "aab10860-ae0c-4930-a41e-6b1785dcbcf0",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "a5a4adff-1e30-4cbc-9f7e-d499b09758f7",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "3738b929-39a3-4d50-8e2d-74b3f7af4ede",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "height": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "e2ba2347-6d7c-40b9-8351-2fe9b71d9c3c",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        192,
+        112
+      ],
+      "id": "b70f2956-ef71-43b3-ae46-42ce3a9b3d66",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "PbSX2L4P6HwRUSsm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1120,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "59f258e0-525e-48f6-b893-4e63dd2f61bb",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        704,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "de49125d-3d46-49c5-812a-dcc6d6c7d6b2",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        944,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "ed5ec8df-f546-49b7-be0c-c7a77a5ba903",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        288,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "b7ea8970-d63f-49b9-af24-7fdfbd27d701",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1040,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "cd34e6b8-349c-4a58-8ff2-8f7509426a7c",
+      "name": "Sticky Note16"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3944c36e-00cb-4d5c-b6ae-168fc1e0bc3b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b41ae8be00c63311550aa819a09cfeacb31b5f4d6021f0bfdb3799bcc5d4ce5a"
+  },
+  "id": "vrhg54l6tRZGymJ4",
+  "tags": []
+}
