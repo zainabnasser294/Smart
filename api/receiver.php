@@ -1,15 +1,14 @@
 <?php
 header("Content-Type: application/json");
 
-// استدعاء ملف الاتصال بقاعدة البيانات
-// تأكدي أن المسار صحيح حسب ترتيب مجلداتك
+
 include '../config/db.php'; 
 
-// 1. استقبال البيانات الخام (JSON)
+
 $json_data = file_get_contents('php://input');
 $data = json_decode($json_data, true);
 
-// 2. التحقق الأمني الأساسي
+
 if (!$data || !isset($data['api_key'])) {
     echo json_encode(["status" => "error", "message" => "Invalid Request"]);
     exit;

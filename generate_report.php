@@ -70,7 +70,7 @@ if ($format == 'pdf') {
     $dompdf->stream("NBI_Report_".$device['device_name']."_".date('Ymd').".pdf");
 
 } else {
-    // Excel using PhpSpreadsheet (fallback to CSV if not installed)
+   
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="NBI_Report_'.$device['device_name'].'_'.date('Ymd').'.csv"');
     $out = fopen('php://output', 'w');

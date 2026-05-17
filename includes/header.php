@@ -192,6 +192,14 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
                         </li>
                     <?php endif; ?>
 
+                    <?php if($_SESSION['role'] === 'user'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-blue-glow active" href="dashboard.php">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
                     <li class="nav-item ms-lg-3">
                         <span class="user-pill">
                             <i class="fas fa-circle-user text-primary"></i> 

@@ -2,7 +2,7 @@
 include 'config/db.php';
 session_start();
 
-// التحقق من تسجيل الدخول
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 
-// جلب الإحصائيات (أسرع باستخدام الاستعلامات المباشرة)
+
 $devices_count = $pdo->prepare("SELECT COUNT(*) FROM devices WHERE user_id = ?");
 $devices_count->execute([$user_id]);
 $total_devices = $devices_count->fetchColumn();

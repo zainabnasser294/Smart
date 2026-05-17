@@ -4,7 +4,7 @@ include 'includes/header.php';
 ?>
 
 <style>
-    /* الخلفية الكحلية العميقة المتناسقة مع الموقع */
+    
     body {
         background-color: #0f172a;
         color: #f8fafc;

@@ -8,20 +8,19 @@ if (isset($_POST['login'])) {
     $user = trim($_POST['username']);
     $pass = $_POST['password'];
 
-    // التحقق من وجود المستخدم في قاعدة البيانات
+   
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$user]);
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($userData) {
-        // التحقق من كلمة المرور (سواء كانت مشفرة أو نص عادي للتجارب)
+      
         if (password_verify($pass, $userData['password']) || $pass === $userData['password']) {
             
             $_SESSION['user_id'] = $userData['id'];
             $_SESSION['username'] = $userData['username'];
             $_SESSION['role'] = $userData['role']; 
 
-            // توجيه المستخدم حسب دوره (Admin, Analyst, User)
             if ($userData['role'] === 'admin') {
                 header("Location: admin_dashboard.php");
             } elseif ($userData['role'] === 'analyst') {

@@ -2,7 +2,7 @@
 session_start();
 include 'config/db.php'; 
 
-// التحقق من صلاحيات الأدمن
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') { 
     header("Location: login.php"); 
     exit; 
@@ -57,7 +57,7 @@ $all_users = $users_stmt->fetchAll();
                 $key = bin2hex(random_bytes(16)); 
 
                 try {
-                    // الآن نقوم بإدخال الـ user_id مع بيانات الجهاز
+                 
                     $sql = "INSERT INTO devices (user_id, device_name, device_ip, api_key, status) VALUES (?, ?, ?, ?, 'online')";
                     $stmt = $pdo->prepare($sql);
                     if ($stmt->execute([$user_id, $name, $ip, $key])) {

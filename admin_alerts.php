@@ -24,13 +24,14 @@ if ($filter_device) {
 }
 
 $sql .= " ORDER BY a.created_at DESC LIMIT 100";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $alerts = $stmt->fetchAll();
 
 $devices = $pdo->query("SELECT id, device_name FROM devices")->fetchAll();
 
-// Fetch last 10 readings if a device is selected
+
 $recent_readings = [];
 if ($filter_device) {
     $stmt_r = $pdo->prepare("SELECT * FROM metrics WHERE device_id = ? ORDER BY captured_at DESC LIMIT 10");

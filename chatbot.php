@@ -74,8 +74,7 @@ include 'includes/header.php';
 
         appendMessage(text, 'user');
         userInput.value = '';
-
-        // Simulate Bot Analysis
+        
         setTimeout(() => {
             let response = "I'm currently indexing the global telemetry data... All systems appear to be operating within normal parameters.";
             

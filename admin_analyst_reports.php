@@ -49,7 +49,7 @@ include 'includes/header.php';
                 <div class="card-body">
                     <h5 class="fw-bold text-info mb-1"><?php echo htmlspecialchars($r['subject']); ?></h5>
                     <p class="small text-muted mb-3">Reported by: <span class="text-white"><?php echo $r['analyst_name']; ?></span> | Device: <span class="text-white"><?php echo $r['device_name']; ?></span></p>
-                    <div class="p-3 bg-black bg-opacity-25 rounded border border-secondary mb-3">
+                    <div class="p-3 bg-black bg-opacity-25 rounded border border-secondary mb-3 text-white-50">
                         <?php echo nl2br(htmlspecialchars($r['message'])); ?>
                     </div>
                 </div>
