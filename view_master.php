@@ -50,6 +50,9 @@ include 'includes/header.php';
                     <a href="view_metrics.php?id=<?php echo $dev['id']; ?>" class="btn btn-sm btn-outline-info">
                         <i class="fas fa-chart-line me-2"></i> Live Metrics
                     </a>
+                    <a href="alerts.php?id=<?php echo $dev['id']; ?>" class="btn btn-sm btn-outline-success">
+                        <i class="fas fa-brain me-2"></i> Behavior Analysis
+                    </a>
                     <a href="reports.php?device_id=<?php echo $dev['id']; ?>" class="btn btn-sm btn-outline-warning">
                         <i class="fas fa-file-invoice me-2"></i> Behavioral Report
                     </a>

@@ -72,8 +72,21 @@ $users = $pdo->query("SELECT * FROM users WHERE id != {$_SESSION['user_id']} ORD
     .modal-content { background: #111827; border: 1px solid rgba(56, 189, 248, 0.2); color: white; }
     .modal-header { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
     .modal-footer { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .modal-content label { color: #cbd5e1 !important; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.3px; }
     .form-control, .form-select { background: #1f2937; border: 1px solid #374151; color: white; }
     .form-control:focus { background: #1f2937; border-color: #38bdf8; color: white; box-shadow: none; }
+    .form-control::placeholder { color: #6b7280 !important; }
+    
+    /* منع تشويه اللون بسبب التعبئة التلقائية للمتصفح (Autofill) */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: #ffffff !important;
+        transition: background-color 5000s ease-in-out 0s;
+        box-shadow: inset 0 0 20px 20px #1f2937 !important;
+    }
 
     .btn-add { background: #38bdf8; color: #080b12; font-weight: 600; border-radius: 10px; border: none; transition: 0.3s; }
     .btn-add:hover { background: #0ea5e9; transform: translateY(-2px); }
